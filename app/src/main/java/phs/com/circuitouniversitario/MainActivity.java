@@ -1,73 +1,119 @@
 package phs.com.circuitouniversitario;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends  Activity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     private Button btn_descricao_view;
+    private String data_evento, distancia_evento, descricao_evento, info_event;
+    private List<evento> mlist;
+    private RecyclerView recyclerView;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initViews();
+        iniciaProcessos();
+        iniciaMenuLateral();
+        iniciaCard();
+    }
 
-        //Menu Lateral
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+    public void iniciaProcessos() {
+        configuraInfoEnvent();
+        btn_descricao_view = findViewById(R.id.btn_descricao);
+        navigationView = findViewById(R.id.nav_view);
+        recyclerView = findViewById(R.id.rv_list);
+    }
+
+    public void configuraInfoEnvent() {
+        data_evento = "02/08/18";
+        distancia_evento = "2km";
+        descricao_evento = "top";
+
+        info_event =    "Descrição: " +
+                        descricao_evento +
+                        "\n\n" +
+                        "Distância: " +
+                        distancia_evento +
+                        "\n" +
+                        "Data: " +
+                        data_evento;
+    }
+
+    public void iniciaMenuLateral () {
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        //Cards
-        RecyclerView recyclerView = findViewById(R.id.rv_list);
-        List<evento> mlist = new ArrayList<>();
-        mlist.add(new evento("Vem pra UFU", "2km",R.drawable.festa1));
-        mlist.add(new evento("Vem pra IFTM", "2km",R.drawable.festa2));
-        mlist.add(new evento("Happy Hour", "2km",R.drawable.festa3));
-        mlist.add(new evento("CC", "2km",R.drawable.festa4));
-        mlist.add(new evento("Baladinha", "2km",R.drawable.festa5));
-        Adapter adapter = new Adapter(this,mlist);
+    public void iniciaCard () {
+        preencheCard();
+        Adapter adapter = new Adapter(this, mlist, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    public void initViews() {
-        btn_descricao_view = findViewById(R.id.btn_descricao);
+    public void preencheCard () {
+        mlist = new ArrayList<>();
+        mlist.add(new evento("Vem pra UFU", R.drawable.festa1));
+        mlist.add(new evento("Vem pra IFTM", R.drawable.festa2));
+        mlist.add(new evento("Happy Hour", R.drawable.festa3));
+        mlist.add(new evento("CC", R.drawable.festa4));
+        mlist.add(new evento("Baladinha", R.drawable.festa5));
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.menu_event) {
+            setContentView(R.layout.activity_main);
+            iniciaProcessos();
+            iniciaMenuLateral();
+            iniciaCard();
+        } else if (id == R.id.menu_user) {
+            setContentView(R.layout.activity_user);
+            iniciaProcessos();
+            iniciaMenuLateral();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_descricao:
+                AlertDialog dialog_info_envent;
+                AlertDialog.Builder dialog_builder = new AlertDialog.Builder(this);
+
+                dialog_builder.setMessage(info_event);
+                dialog_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {}
+                });
+
+                dialog_info_envent = dialog_builder.create();
+                dialog_info_envent.show();
+                break;
+        }
     }
 }
 
