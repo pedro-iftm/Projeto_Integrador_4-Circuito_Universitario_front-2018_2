@@ -3,4 +3,5 @@
     <string name="txt_btn_descricao">Descrição</string>
     <string name="menu_txt_user">Usuário</string>
     <string name="menu_txt_event">Eventos</string>
+    <string name="menu_txt_cad_event">Cadastro de Eventos</string>
 </resources>

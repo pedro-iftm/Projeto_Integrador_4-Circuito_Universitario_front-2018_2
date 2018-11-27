@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
-        android:text="TextView"
+        android:text="Nome"
         android:textColor="@color/colorWhite"
         android:textSize="30sp"
         android:textStyle="bold"

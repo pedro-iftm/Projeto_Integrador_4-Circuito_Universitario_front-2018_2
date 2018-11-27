@@ -3,6 +3,7 @@ package phs.com.circuitouniversitario;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -31,6 +32,7 @@ public class MainActivity extends  Activity
         setContentView(R.layout.activity_main);
         iniciaProcessos();
         iniciaMenuLateral();
+        iniciaBotaoFlutuante();
         iniciaCard();
     }
 
@@ -39,6 +41,26 @@ public class MainActivity extends  Activity
         btn_descricao_view = findViewById(R.id.btn_descricao);
         navigationView = findViewById(R.id.nav_view);
         recyclerView = findViewById(R.id.rv_list);
+    }
+
+    public void iniciaBotaoFlutuante () {
+        FloatingActionButton fb_filter = findViewById(R.id.fb_filter);
+        fb_filter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog dialog_filter;
+                AlertDialog.Builder dialog_builder = new AlertDialog.Builder(MainActivity.this);
+
+                dialog_builder.setMessage("Teste Botão Flutuante");
+                dialog_builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {}
+                });
+
+                dialog_filter = dialog_builder.create();
+                dialog_filter.show();
+            }
+        });
     }
 
     public void configuraInfoEnvent() {
@@ -87,10 +109,14 @@ public class MainActivity extends  Activity
             iniciaMenuLateral();
             iniciaCard();
         } else if (id == R.id.menu_user) {
-            setContentView(R.layout.activity_user);
+            setContentView(R.layout.activity_nav_user);
             iniciaProcessos();
             iniciaMenuLateral();
-        }
+        } else if (id == R.id.menu_cad_event) {
+            setContentView(R.layout.activity_nav_event);
+            iniciaProcessos();
+            iniciaMenuLateral();
+        };
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
