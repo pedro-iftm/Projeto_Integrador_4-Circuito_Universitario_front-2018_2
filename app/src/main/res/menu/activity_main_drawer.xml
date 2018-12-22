@@ -9,10 +9,6 @@
             android:icon="@drawable/menu_event_img"
             android:title="@string/menu_txt_event" />
         <item
-            android:id="@+id/menu_user"
-            android:icon="@drawable/menu_user_img"
-            android:title="@string/menu_txt_user" />
-        <item
             android:id="@+id/menu_cad_event"
             android:icon="@drawable/menu_event_cad_img"
             android:title="@string/menu_txt_cad_event" />
