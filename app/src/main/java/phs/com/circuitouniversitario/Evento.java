@@ -11,11 +11,11 @@ public class Evento implements Serializable {
     @SerializedName("nomeEvento")
     String nome;
     @SerializedName("descricaoEvento")
-    String descricao;
+    String endereco;
     @SerializedName("dataEvento")
     String data;
     @SerializedName("enderecoEvento")
-    String endereco;
+    String descricao;
 
     public Evento(Integer idEvento, String nomeEvento, String descricaoEvento, String dataEvento, String enderecoEvento) {
         this.idEvento = idEvento;

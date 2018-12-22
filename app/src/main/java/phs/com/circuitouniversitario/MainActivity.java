@@ -32,7 +32,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends Activity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, CallbackAdapter {
+        implements NavigationView.OnNavigationItemSelectedListener, CallbackAdapter {
 
     public static final String BASE_URL = "http://10.0.2.2:7000/";
     private String data_evento, descricao_evento, info_event;
@@ -42,13 +42,13 @@ public class MainActivity extends Activity
     private NavigationView navigationView;
     private Button btnAbreGaleria, btnCadastar;
     private Adapter adapter;
-    private View.OnClickListener onClickListener;
     EditText et_cad_event_nome;
     EditText et_cad_event_data;
     EditText et_cad_event_descricao;
     EditText et_cad_event_local;
     Evento evento;
     View itemView;
+    private List<Evento> eventoResponse;
 
 
     @Override
@@ -65,7 +65,6 @@ public class MainActivity extends Activity
         et_cad_event_descricao = findViewById(R.id.et_cad_event_descricao);
         et_cad_event_local = findViewById(R.id.et_cad_event_local);
         et_cad_event_data = findViewById(R.id.et_cad_event_data);
-        onClickListener = this;
         navigationView = findViewById(R.id.nav_view);
         recyclerView = findViewById(R.id.rv_list);
     }
@@ -140,9 +139,9 @@ public class MainActivity extends Activity
         call.enqueue(new Callback<Evento>() {
             @Override
             public void onResponse(Call<Evento> call, Response<Evento> response) {
-                if (response.isSuccessful() && response.body() != null) {
+
                     Toast.makeText(MainActivity.this, "Evento deletado com sucesso", Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -201,30 +200,36 @@ public class MainActivity extends Activity
 
 
     //Botão Descrição
-    @Override
-    public void onClick(View v) {
+    public void onClick(View v, final int position) {
+
         switch (v.getId()) {
             case R.id.btn_descricao:
                 AlertDialog dialog_info_envent;
                 AlertDialog.Builder dialog_builder = new AlertDialog.Builder(this);
 
 
-                dialog_builder.setMessage(info_event);
+                dialog_builder.setMessage("Descrição: " +
+                        eventoResponse.get(position).getDescricao() +
+                                "\n\n" +
+                                "Endereço: " +
+                        eventoResponse.get(position).getEndereco()+
+                                "\n" +
+                                "Data: " +
+                        eventoResponse.get(position).getData());
                 dialog_builder.setPositiveButton("VER NO MAPA", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         sufixo_maps = "geo:0,0?q=";
-                        endereco_maps = sufixo_maps + evento.getEndereco();
+                        endereco_maps = sufixo_maps + eventoResponse.get(position).getEndereco();
                         chamaMaps(endereco_maps);
                     }
                 });
                 dialog_builder.setNegativeButton("EXCLUIR EVENTO", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        if (evento != null) {
-                            deleteEvento(evento.getIdEvento());
-                        }
-                        Toast.makeText(MainActivity.this, "Excluído", Toast.LENGTH_SHORT).show();
+
+                            deleteEvento(eventoResponse.get(position).getIdEvento());
+                        //Toast.makeText(MainActivity.this, "Excluído", Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -252,23 +257,24 @@ public class MainActivity extends Activity
             @Override
             public void onResponse(Call<List<Evento>> call, Response<List<Evento>> response) {
 
-                List<Evento> eventoResponse = response.body();
+                eventoResponse = response.body();
                 Adapter.ViewHolder teste;
                 /*data_evento = teste.getData();
                 endereco_evento = teste.getEndereco();
                 descricao_evento = teste.getDescricao();*/
-                data_evento = eventoResponse.get(0).getData();
+
+               /* data_evento = eventoResponse.get(0).getData();
                 endereco_evento = eventoResponse.get(0).getEndereco();
                 descricao_evento = eventoResponse.get(0).getDescricao();
                 info_event = "Descrição: " +
-                        descricao_evento +
+                        eventoResponse.get(descricao_evento +
                         "\n\n" +
                         "Endereço: " +
                         endereco_evento +
                         "\n" +
                         "Data: " +
-                        data_evento;
-                adapter = new Adapter(eventoResponse, onClickListener, MainActivity.this);
+                        data_evento;*/
+                adapter = new Adapter(eventoResponse, MainActivity.this, MainActivity.this);
                 recyclerView.setAdapter(adapter);
             }
 

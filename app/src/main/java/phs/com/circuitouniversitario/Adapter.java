@@ -1,6 +1,7 @@
 package phs.com.circuitouniversitario;
 
 
+import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +15,11 @@ import java.util.List;
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     List<Evento> listaEventos;
-    View.OnClickListener onClickListener;
+    Activity onClickListener;
     private Button btn_descricao;
     private CallbackAdapter callbackAdapter;
 
-    public Adapter(List<Evento> listaEventos, View.OnClickListener onClickListener, CallbackAdapter callbackAdapter) {
+    public Adapter(List<Evento> listaEventos, Activity onClickListener, CallbackAdapter callbackAdapter) {
         this.listaEventos = listaEventos;
         this.onClickListener = onClickListener;
         this.callbackAdapter = callbackAdapter;
@@ -55,8 +56,13 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
             //botao descricao
             btn_descricao = itemView.findViewById(R.id.btn_descricao);
-            btn_descricao.setOnClickListener(onClickListener);
-            callbackAdapter.setEvento(listaEventos.get(getAdapterPosition() + 1));
+            btn_descricao.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity)onClickListener).onClick(v,getAdapterPosition());
+                }
+            });
+           // callbackAdapter.setEvento(listaEventos.get(getAdapterPosition()));
         }
 
 
